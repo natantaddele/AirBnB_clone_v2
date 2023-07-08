@@ -1,33 +1,22 @@
-from fabric.api import env, run, local, hosts
-from fabric.operations import put
+#!/usr/bin/python3
+"""
+Fabric script that generates a tgz archive from the contents of the web_static
+folder of the AirBnB Clone repo
+"""
+
 from datetime import datetime
-import os
+from fabric.api import local
+from os.path import isdir
 
 
-env.hosts = ['<IP web-01>', '<IP web-02>']
-env.user = '<your-username>'
-env.key_filename = '<path-to-ssh-key>'
-
-
-def do_clean(number=0):
-    number = int(number)
-    if number < 0:
-        number = 0
-    elif number == 1:
-        number = 2
-
-    # Get a list of archives in the versions folder
-    local_archives = local('ls -1t versions', capture=True).split('\n')
-    archives_to_delete = local_archives[number:]
-
-    # Delete unnecessary archives in the versions folder
-    for archive in archives_to_delete:
-        local('rm -f versions/{}'.format(archive))
-
-    # Get a list of archives in the releases folder on the web servers
-    remote_archives = run('ls -1t /data/web_static/releases').split('\n')
-    archives_to_delete = remote_archives[number:]
-
-    # Delete unnecessary archives in the releases folder on the web servers
-    for archive in archives_to_delete:
-        run('rm -f /data/web_static/releases/{}'.format(archive))
+def do_pack():
+    """generates a tgz archive"""
+    try:
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        if isdir("versions") is False:
+            local("mkdir versions")
+        file_name = "versions/web_static_{}.tgz".format(date)
+        local("tar -cvzf {} web_static".format(file_name))
+        return file_name
+    except:
+        return None
