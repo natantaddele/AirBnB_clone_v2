@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/python3
 
 from fabric.api import env, run, local,hosts
@@ -9,13 +10,31 @@ env.hosts = ['<IP web-01', '<IP web-02>']
 env.user = '<your-username>'
 env.key_filename = '<path-to-ssh-key>'
 
+=======
+from fabric.api import env, run, local, hosts
+from fabric.operations import put
+from datetime import datetime
+import os
+
+
+env.hosts = ['<IP web-01>', '<IP web-02>']
+env.user = '<your-username>'
+env.key_filename = '<path-to-ssh-key>'
+
+
+>>>>>>> 745f6862305549cc531994299d0533657cb1008f
 def do_clean(number=0):
     number = int(number)
     if number < 0:
         number = 0
     elif number == 1:
         number = 2
+<<<<<<< HEAD
 # Get a list of archives in the versions folder
+=======
+
+    # Get a list of archives in the versions folder
+>>>>>>> 745f6862305549cc531994299d0533657cb1008f
     local_archives = local('ls -1t versions', capture=True).split('\n')
     archives_to_delete = local_archives[number:]
 
