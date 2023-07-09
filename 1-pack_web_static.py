@@ -1,34 +1,23 @@
-from fabric.api import env, run, local, hosts
-from fabric.operations import put
-from datetime import datetime
 from fabric.api import local
-from os.path import isdir
+from datetime import datetime
+import os
 
 
-env.hosts = ['<IP web-01>', '<IP web-02>']
-env.user = '<your-username>'
-env.key_filename = '<path-to-ssh-key>'
+def do_pack():
+    # Create the versions folder if it doesn't exist
+    if not os.path.exists("versions"):
+        os.makedirs("versions")
 
+    # Generate the archive name based on the current date and time
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    archive_name = "web_static_{}.tgz".format(timestamp)
 
-def do_clean(number=0):
-    number = int(number)
-    if number < 0:
-        number = 0
-    elif number == 1:
-        number = 2
+    # Compress the web_static folder into the archive
+    local("tar -czvf versions/{} web_static".format(archive_name))
 
-    # Get a list of archives in the versions folder
-    local_archives = local('ls -1t versions', capture=True).split('\n')
-    archives_to_delete = local_archives[number:]
+    # Return the path to the archive if it has been successfully generated
+    if os.path.exists("versions/{}".format(archive_name)):
+        return "versions/{}".format(archive_name)
+    else:
+        return None
 
-    # Delete unnecessary archives in the versions folder
-    for archive in archives_to_delete:
-        local('rm -f versions/{}'.format(archive))
-
-    # Get a list of archives in the releases folder on the web servers
-    remote_archives = run('ls -1t /data/web_static/releases').split('\n')
-    archives_to_delete = remote_archives[number:]
-
-    # Delete unnecessary archives in the releases folder on the web servers
-    for archive in archives_to_delete:
-        run('rm -f /data/web_static/releases/{}'.format(archive))
