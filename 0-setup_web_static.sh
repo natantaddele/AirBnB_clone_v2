@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Install Nginx if not already installed
 if ! command -v nginx >/dev/null 2>&1; then
@@ -26,7 +26,7 @@ sudo sed -i '/listen 80 default_server/a location /hbnb_static/ {\n\talias /data
 
 # Restart Nginx
 sudo service nginx restart
-t#!/usr/bin/env bash
+
 # sets up the web servers for the deployment of web_static
 
 sudo apt-get -y update
