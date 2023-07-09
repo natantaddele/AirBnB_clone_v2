@@ -1,20 +1,5 @@
-#!/usr/bin/python3
-
-from fabric.api import env, run, local,hosts
-from fabric.operations import put
-from datetime import datetime
-import os
-
-env.hosts = ['<IP web-01', '<IP web-02>']
-env.user = '<your-username>'
-env.key_filename = '<path-to-ssh-key>'
-
-=======
-from fabric.api import env, run, local, hosts
-from fabric.operations import put
-=======
+#!/usr/bin/env bash
 from fabric.api import local
->>>>>>> b47fbe3830fded5ddb9e362c62ee79f156fb599d
 from datetime import datetime
 import os
 
@@ -37,3 +22,4 @@ def do_pack():
     else:
         return None
 
+# Additional tasks or code here...
